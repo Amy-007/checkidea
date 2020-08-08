@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.amy.demo.business.mapper.LogMapper">
+    <resultMap id="BaseResultMap" type="com.amy.demo.entity.Log">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="operation" jdbcType="VARCHAR" property="operation" />
+        <result column="time" jdbcType="INTEGER" property="time" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="params" jdbcType="VARCHAR" property="params" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="location" jdbcType="VARCHAR" property="location" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, user_id, username, `operation`, `time`, `method`, params, ip, create_time,location
+  </sql>
+    <!--
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from log
+        <where>
+            <if test="username!=null and username!=''">
+                AND username LIKE concat('%',#{username},'%')
+            </if>
+            <if test="operation!=null and operation!=''">
+                AND operation LIKE concat('%',#{operation},'%')
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                AND create_time &lt;= #{endTime}
+            </if>
+            <if test="userId!=null and userId!='' ">
+                AND user_id=#{userId}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+-->
+
+    <delete id="batchDeletedLog">
+        delete
+        from log
+        where id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

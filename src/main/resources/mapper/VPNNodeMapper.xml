@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.amy.demo.business.mapper.VPNNodeMapper">
+    <resultMap id="BaseResultMap" type="com.amy.demo.entity.VPNNode">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="node" jdbcType="VARCHAR" property="node" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="port" jdbcType="INTEGER" property="port" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="deleted" jdbcType="INTEGER" property="deleted" />
+        <result column="protocol" jdbcType="VARCHAR" property="protocol" />
+        <result column="max_up" jdbcType="INTEGER" property="maxUp" />
+        <result column="max_down" jdbcType="INTEGER" property="maxDown" />
+        <result column="delay" jdbcType="INTEGER" property="delay" />
+        <result column="link" jdbcType="VARCHAR" property="link" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, node, ip, port, status, protocol,deleted
+    , max_up, max_down, delay, link, create_time
+    </sql>
+
+    <!--
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.amy.demo.vo.request.VPNNodePageReqVO">
+        select
+        <include refid="Base_Column_List"></include>
+        from vpn_node
+        <where>
+            deleted=1
+            <if test="node!=null and node!=''">
+                AND node LIKE concat('%',#{node},'%')
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                AND create_time &lt;= #{endTime}
+            </if>
+            <if test="nodeId!=null and nodeId!='' ">
+                AND id=#{nodeId}
+            </if>
+            <if test="status!=null and status!='' or status==0 ">
+                AND `status`=#{status}
+            </if>
+        </where>
+        order by create_time DESC
+    </select>
+-->
+
+    <update id="deletedNodes">
+        update vpn_node
+        <set>
+            deleted = 0,
+        </set>
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+
+
+</mapper>
